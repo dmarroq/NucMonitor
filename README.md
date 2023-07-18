@@ -56,7 +56,7 @@ Note: Ensure that you have the necessary credentials and permissions to access t
 The NucMonitor program performs the following tasks:
 
 Retrieves an authentication token from the RTE API using the get_oauth() function.
-Retrieves unavailability data from the RTE API using the get_unavailabilities() function. The data is stored in a MongoDB database and saved locally in a JSON file.
+Retrieves unavailability data from the RTE API using the get_unavailabilities() function. The data is stored in a MongoDB database and saved locally in a JSON file. Can only get 2 months max from RTE.
 Processes the retrieved unavailability data to calculate the power availability for each nuclear power plant and each day of interest.
 Stores the processed data in a MongoDB database and saves it locally in a JSON file.
 Generates an Excel file with the processed data (optional).
