@@ -34,8 +34,7 @@ def get_excel(database_name, collection_name):
 
     # Retrieve the latest document from the collection
     # latest_doc = collection.find_one({}, {"_id": 0}, sort=[("_timestamp", pymongo.ASCENDING)])
-    latest_doc = collection.find().sort({"_id": -1})
-
+    latest_doc = collection.find().sort({"_id": -1}).limit(1)
 
     if latest_doc:
         # Convert the data to a DataFrame
@@ -51,6 +50,15 @@ def get_excel(database_name, collection_name):
 
     # Close the database connection
     client.close()
+
+def get_excel_local(data, path, photo_date):
+    data_df = pd.DataFrame(data)
+    if photo_date:
+        excel_file_path = "photo_date.xlsx"
+    else:
+        excel_file_path = "filtered_unavailabilities.xlsx"
+    # Export the DataFrame to Excel with index
+    data_df.to_excel(path + excel_file_path, index=True)
 
 # --------------------------------------------------------------------------------------- #
 
@@ -527,7 +535,8 @@ def nuc_monitor(user, passw, host, database, collection, start_date, end_date, p
         print("File stored in ", json_file_path)
         user_input_excel = messagebox.askquestion("Excel", "Would you like to get an excel of the NucMonitor?")
         if user_input_excel == "yes":
-            get_excel(database_name, 'filtered')
+            # get_excel(database_name, 'filtered')
+            get_excel_local(results_plants, path_to_store, photo_date)
             messagebox.showinfo("Success", "Excel downloaded.")
         return
     else:
@@ -553,7 +562,8 @@ def nuc_monitor(user, passw, host, database, collection, start_date, end_date, p
 
         user_input_excel = messagebox.askquestion("Excel", "Would you like to get an excel of the Photo Date?")
         if user_input_excel == "yes":
-            get_excel(database_name, 'photo_date')
+            # get_excel(database_name, 'photo_date')
+            get_excel_local(results_plants, path_to_store, photo_date)
             messagebox.showinfo("Success", "Excel downloaded.")
         return
     # -------------------------------------------------
@@ -614,10 +624,6 @@ def create_gui():
 
     # Start the GUI event loop
     window.mainloop()
-
-
-if __name__ == "__main__":
-    create_gui()
 
 
 if __name__ == "__main__":
