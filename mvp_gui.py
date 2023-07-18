@@ -18,6 +18,7 @@ import tkinter as tk
 from tkinter import filedialog, simpledialog
 from tkinter import simpledialog as sd
 
+# Convert the json called from the database into an excel
 def get_excel(database_name, collection_name):
     # Credentials
     user = "dmarroquin"
@@ -35,6 +36,7 @@ def get_excel(database_name, collection_name):
     # latest_doc = collection.find_one({}, {"_id": 0}, sort=[("_timestamp", pymongo.ASCENDING)])
     latest_doc = collection.find().sort({"_id": -1})
 
+
     if latest_doc:
         # Convert the data to a DataFrame
         data_df = pd.DataFrame(latest_doc)
@@ -50,9 +52,9 @@ def get_excel(database_name, collection_name):
     # Close the database connection
     client.close()
 
+# --------------------------------------------------------------------------------------- #
 
-
-# Access the raw files without storing
+# Access the raw files without storing locally
 def access_files_from_mongodb(database_name, collection_name):
     # Credentials
     user = "dmarroquin"
@@ -90,7 +92,9 @@ def access_files_from_mongodb(database_name, collection_name):
     client.close()
     return json_data
 
+# --------------------------------------------------------------------------------------- #
 
+# Store data with more than 16MB in a collection using GridFS
 def mongo_store_large_data(json_data, database_name, collection_name):
     # Credentials
     user = "dmarroquin"
@@ -115,6 +119,9 @@ def mongo_store_large_data(json_data, database_name, collection_name):
 
     return file_id
 
+# --------------------------------------------------------------------------------------- #
+
+# Store normal size data
 def mongo_store_data(data, database_name, collection_name):
     # Credentials
     user = "dmarroquin"
@@ -134,6 +141,8 @@ def mongo_store_data(data, database_name, collection_name):
 
     # Close the database connection
     client.close()
+
+# --------------------------------------------------------------------------------------- #
 
 # Convert the dictionary of dictionaries to JSON
 def convert_to_json(item):
@@ -188,6 +197,8 @@ def get_oauth():
     oauth = data['access_token']
     
     return(oauth)
+
+# --------------------------------------------------------------------------------------- #
 
 # This function does severall calls to the RTE API (because maximum time between start_date and end_date is 1 month) 
 # the argument past_photo is a boolean (True, False) that indicates if we want to make a photo from the past or not
@@ -289,13 +300,11 @@ def get_unavailabilities(path_to_store, oauth, years, months, past_photo, past_d
         
 # --------------------------------------------------------------------------------------- #
 
-# --------------------------------------------------------------------------------------- #
-
 # this function does the proper analysis of the data
 # It takes the user, password, host, to connect to the mongodb database and get
 # the data to clean from the database from database and collection
 # Create a condition that makes it so it only takes the ACTIVE when nucmonitor, and 
-# all (DISMISSED, ACTIVE) when photo_date
+# all (INACTIVE, ACTIVE) when photo_date
 def nuc_monitor(user, passw, host, database, collection, start_date, end_date, path_to_store):
     # # Slightly changed metadata to fit the data from the RTE API: ST-LAURENT B 2 --> ST LAURENT 2, ....
 
@@ -346,7 +355,7 @@ def nuc_monitor(user, passw, host, database, collection, start_date, end_date, p
         photo_date = True
     else:
         nuclear_unav = [d for d in unavailabilities if d['production_type'] == 'NUCLEAR' and d['status'] == 'ACTIVE']
-    return print(past_date)
+    # return print(past_date)
     
 
 # --------------------------- HERE IS THE CHANGE TO GET ONLY ACTIVE OR ACTIVE AND INACTIVE --------------------------- #
@@ -484,11 +493,9 @@ def nuc_monitor(user, passw, host, database, collection, start_date, end_date, p
                     # if previous_result != power_of_day:
                     #     print(f"Previous result was {previous_result} and the new one is {power_of_day}")
 
-    print(results_plants)
-    # results_plants_total = add_total(results_plants)
-    # print(results_plants_total)
     add_total(results_plants)
     print("Done")
+    print(results_plants)
     # Convert datetime key to string to store in mongodb
     results_plants = {plant: {str(date): power for date, power in plant_data.items()} for plant, plant_data in results_plants.items()}
     # -------------------------------------------------
@@ -607,6 +614,10 @@ def create_gui():
 
     # Start the GUI event loop
     window.mainloop()
+
+
+if __name__ == "__main__":
+    create_gui()
 
 
 if __name__ == "__main__":
