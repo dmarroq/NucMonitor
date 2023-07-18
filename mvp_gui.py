@@ -537,7 +537,8 @@ def nuc_monitor(user, passw, host, database, collection, start_date, end_date, p
         if user_input_excel == "yes":
             # get_excel(database_name, 'filtered')
             get_excel_local(results_plants, path_to_store, photo_date)
-            messagebox.showinfo("Success", "Excel downloaded.")
+            # messagebox.showinfo("Success", "Excel downloaded.")
+            messagebox.showinfo("Success", "Excel stored in" + path_to_store)
         return
     else:
         database_name = "data"  # Specify your database name
@@ -564,7 +565,7 @@ def nuc_monitor(user, passw, host, database, collection, start_date, end_date, p
         if user_input_excel == "yes":
             # get_excel(database_name, 'photo_date')
             get_excel_local(results_plants, path_to_store, photo_date)
-            messagebox.showinfo("Success", "Excel downloaded.")
+            messagebox.showinfo("Success", "Excel stored in" + path_to_store)
         return
     # -------------------------------------------------
     return
