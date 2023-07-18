@@ -2,6 +2,12 @@
 
 The NucMonitor program is a Python script that interacts with the RTE (Réseau de Transport d'Électricité) API to retrieve and analyze data on nuclear power plant unavailabilities. It uses the tkinter library for creating a graphical user interface (GUI) to input the necessary parameters.
 
+Future:
+- API to connect to database
+- Processes put into classes
+- Frontend to view data
+
+
 ## Dependencies
 The program requires the following dependencies:
 
