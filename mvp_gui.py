@@ -32,7 +32,8 @@ def get_excel(database_name, collection_name):
     collection = db[collection_name]
 
     # Retrieve the latest document from the collection
-    latest_doc = collection.find_one({}, {"_id": 0}, sort=[("_timestamp", pymongo.ASCENDING)])
+    # latest_doc = collection.find_one({}, {"_id": 0}, sort=[("_timestamp", pymongo.ASCENDING)])
+    latest_doc = collection.find().sort({"_id": -1})
 
     if latest_doc:
         # Convert the data to a DataFrame
